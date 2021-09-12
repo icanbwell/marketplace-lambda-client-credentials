@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: marketplace-lambda-client-credentials
+  description:
+  annotations:
+    github.com/project-slug: icanbwell/marketplace-lambda-client-credentials
+    opsgenie.com/component-selector: 'tag:"service:marketplace-lambda-client-credentials"'
+spec:
+  type: service
+  owner: marketplace-group
+  lifecycle: production
