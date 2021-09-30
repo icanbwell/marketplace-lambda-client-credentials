@@ -1,9 +1,9 @@
 {
-  "name": "no-bs-typescript-lambda-boilerplate",
-  "version": "2.0.0",
-  "description": "Simple Typescript boilerplate for writing AWS Lambdas",
+  "name": "marketplace-lambda-client-credentials",
+  "version": "0.0.1",
+  "description": "Lambda function to be triggered by post confimation Cognito hook to create a new client and persist its Client Id and secret",
   "main": "dist/index.js",
-  "author": "Jean M. Lescure",
+  "author": "bwell",
   "license": "Apache-2.0",
   "scripts": {
     "packdeps": "node dependencies.js && cd dist && yarn",
@@ -14,6 +14,7 @@
     "dev": "nodemon -w ./src -e '' -s SIGINT -x yarn run:lambda"
   },
   "devDependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.25.0",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",

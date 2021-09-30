@@ -2,24 +2,40 @@ import { inspect } from 'util';
 import fetch from 'node-fetch';
 
 import {
-  APIGatewayProxyHandlerV2,
+  PostConfirmationTriggerEvent,
+  PostConfirmationTriggerHandler,
 } from 'aws-lambda';
 
-export const handler: APIGatewayProxyHandlerV2 = (event, context, callback) => {
-  (async () => {
-    const json = await fetch('https://api.github.com/gists').then((r) => r.json());
+import {
+  CognitoIdentityProviderClient,
+  ListUserPoolClientsCommand,
+  ListUserImportJobsCommandInput,
+  ListUserPoolClientsCommandOutput
+} from "@aws-sdk/client-cognito-identity-provider";
 
-    console.log('Random Gist:', json[0]);
+export const handler: PostConfirmationTriggerHandler = (event: PostConfirmationTriggerEvent, context, callback) => {
 
-    callback(null, inspect(event));
-  })().catch((e) => {
-    console.log(e);
-    callback(inspect(e), {
-      statusCode: 500,
-      headers: {
-        'content-type': 'text/plain',
-      },
-      body: 'Internal Server Error',
-    });
-  });
+    console.log('TEST request', event.request.userAttributes['custom:vendorID'])
+
+    //check vendorID attribute existance
+    if (event.request.userAttributes['custom:vendorID']) {
+      (async () => {
+         const client = new CognitoIdentityProviderClient({});
+         const params: ListUserImportJobsCommandInput = {
+          UserPoolId: event.userPoolId,
+          MaxResults: 100
+        };
+        const command = new ListUserPoolClientsCommand(params);
+        try {
+          const data: ListUserPoolClientsCommandOutput = await client.send(command);
+          console.log(data)
+        } catch (error) {
+          // error handling.
+        } finally {
+          // finally.
+        }
+      });
+    } else {
+      callback(null, inspect(event));
+    }
 };
